@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+
+<h2>使用者清單</h2>
+<table>
+    <tr>
+        <th>帳號</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <th:block th:object="${user}">
+            <td th:text="*{username}"></td>
+            <td>
+                <form th:action="@{/admin/users/reset_password/{username}(username=*{username})}" method="post" class="inline_form">
+                    <button type="submit" class="confirm_btn">重設密碼</button>
+                </form>
+                <form th:action="@{/admin/users/delete/{username}(username=*{username})}" method="post" class="inline_form">
+                    <button type="submit" class="confirm_btn">刪除</button>
+                </form>
+            </td>
+        </th:block>
+    </tr>
+</table>
+
+</body>
+</html>

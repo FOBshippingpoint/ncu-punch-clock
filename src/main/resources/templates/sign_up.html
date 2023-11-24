@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+<body>
+<h2>註冊</h2>
+<form th:action="@{/sign_up}" th:object="${user}" method="post">
+    <th:block th:replace="~{fragments/form_error :: formError}"></th:block>
+    <p>
+        <label>Portal帳號</label><br/>
+        <input type="text" th:field="*{username}" required/>
+    </p>
+    <p>
+        <label>Portal密碼</label><br/>
+        <input type="password" th:field="*{password}" required/>
+    </p>
+    <p>
+        <label>確認密碼</label><br/>
+        <input type="password" th:field="*{confirmPassword}" required/>
+    </p>
+    <p>
+        <label>邀請碼</label><br/>
+        <input type="text" th:field="*{passcode}" required/>
+    </p>
+    <p>
+        <button type="submit">註冊</button>
+    </p>
+</form>
+
+<a th:href="@{/login}">已有帳號？點我登入</a>
+<br/>
+<br/>
+<p>NCU打卡魔法師透過<a href="https://www.selenium.dev/">Selenium</a>登入您的Portal帳戶來打卡，故需要您提供Portal帳密。</p>
+</body>
+</html>

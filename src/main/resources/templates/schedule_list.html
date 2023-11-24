@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+
+<h2>打卡清單</h2>
+<p th:if="${#arrays.isEmpty(punches)}">目前沒有打卡紀錄
+    <th:block sec:authorize="!hasRole('ROLE_ADMIN')">
+        ，要<a th:href="@{/schedules/new}">新增排程</a>嗎？
+    </th:block>
+</p>
+<th:block th:unless="${#arrays.isEmpty(punches)}">
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')" th:object="${punchQuery}">
+        <form th:action="@{/schedules}" method="get" class="inline_form">
+            <p>
+                <label>帳號</label>
+                <input type="text" name="username" th:value="*{username}"/>
+                <button type="submit">查詢</button>
+            </p>
+        </form>
+    </th:block>
+    <table>
+        <tr>
+            <th sec:authorize="hasRole('ROLE_ADMIN')">帳號</th>
+            <th>簽到工作/計畫編號</th>
+            <th>簽到/退時間</th>
+            <th>工作內容</th>
+            <th>簽到狀態</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="punch : ${punches}">
+            <th:block th:object="${punch}">
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/schedules(username=*{user.username})}"
+                       th:text="*{user.username}"></a>
+                </td>
+                <td>
+                    <a th:href="*{partTimeUsuallyUrl}"
+                       th:text="*{jobName}"></a>
+                </td>
+                <td th:text="${#temporals.format(punch.clockInTime, 'yyyy/MM/dd HH') + '~' + #temporals.format(punch.clockOutTime, 'HH') + '時'}"></td>
+                <td th:text="*{jobDescription}"></td>
+                <td th:text="*{status}"></td>
+                <td>
+                    <a th:href="@{/schedules/{id}(id=*{id})}" class="no_decoration">
+                        <button th:disabled="*{!isEditable}">編輯</button>
+                    </a>
+                    <form th:action="@{/schedules/delete/{id}(id=*{id})}" method="post" class="inline_form">
+                        <button type="submit" class="confirm_btn">刪除</button>
+                    </form>
+                </td>
+            </th:block>
+        </tr>
+    </table>
+</th:block>
+</body>
+</html>

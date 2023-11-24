@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+<h2>打卡排程</h2>
+
+<form th:action="@{/schedules/new}" method="post" th:object="${scheduleDTO}">
+    <th:block th:replace="~{fragments/form_error :: formError}"></th:block>
+    <p>
+        <label>簽到工作/計畫網址</label><br/>
+        <input type="text" th:field="*{partTimeUrl}" required>
+        在<a href="https://cis.ncu.edu.tw/HumanSys/student/stdSignIn">兼任助理/工讀生/臨時工專區</a>按下「新增簽到」，並複製網址。
+    </p>
+    <p>
+        <label>工作名稱</label><br/>
+        <input type="text" th:field="*{jobName}">
+    </p>
+    <p>
+        <label>工作內容</label><br/>
+        <textarea th:field="*{jobDescription}"></textarea>
+    </p>
+    <p>
+        <label>上班時間</label><br/>
+        <input type="number" th:field="*{clockInTime}" value="9" min="8" max="17" required>
+    </p>
+    <p>
+        <label>下班時間</label><br/>
+        <input type="number" th:field="*{clockOutTime}" value="15" min="8" max="17" required>
+    </p>
+    <p>
+        <label>每月開始日期</label><br/>
+        <input type="number" th:field="*{startDate}" value="1" min="1" max="31" required>
+    </p>
+    <p>
+        <label>每月結束日期</label><br/>
+        <input type="number" th:field="*{endDate}" value="1" min="1" max="31" required>
+    </p>
+    <label>排定月份</label><br/>
+    <div th:each="month : ${sixYearMonthsFromNow}">
+        <input th:id="${month.hashCode()}" type="checkbox" th:field="*{yearMonths}" th:value="${month}">
+        <label th:for="${month.hashCode()}" th:text="${#temporals.format(month, 'yyyy/MMMM')}"></label>
+    </div>
+    <button type="submit">送出</button>
+</form>
+
+</body>
+</html>

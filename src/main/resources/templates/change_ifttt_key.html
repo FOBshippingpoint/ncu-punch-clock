@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+<body>
+<h2>通知設定</h2>
+<form id="change_ifttt_key_form" th:action="@{/change_ifttt_key}" method="post" th:object="${iftttKeyDTO}">
+    <th:block th:replace="~{fragments/form_error :: formError}"></th:block>
+    <p>
+        NCU打卡魔法師透過<a href="https://ifttt.com/">IFTTT</a>傳送簽到/退通知，您可以利用IFTTT連接至LINE
+        Notify或Discord
+        Bot等服務。
+    </p>
+    <ol>
+        <li>至<a href="https://ifttt.com">IFTTT</a>註冊帳號。</li>
+        <li><a href="https://ifttt.com/create">Create</a>一個用來傳送打卡通知的Applet。</li>
+        <li>在If This選擇Webhooks的Receive a web request。</li>
+        <li>在Event Name輸入框填入<kbd>ncu_punch_clock</kbd>，按下Create trigger。</li>
+        <li>在Then That選擇LINE（或其他您偏好的服務），再點選Send message。</li>
+        <li>連結至您的LINE帳戶，選擇訊息要傳送到哪裡。</li>
+        <li>刪除Message欄位的內容，並輸入<kbd>{{Value1}}</kbd>。</li>
+        <li>按下Create action，再按下Continue，最後點選Finish。</li>
+        <li>進入<a href="https://ifttt.com/maker_webhooks">此連結</a>，點選Documentation。</li>
+        <li>複製網頁頂端的Your key is: <kbd>你的IFTTT Webhooks Key</kbd>，貼至NCU打卡魔法師。</li>
+    </ol>
+    <p>
+        <label>IFTTT Webhooks Key</label><br/>
+        <input type="password" th:field="*{iftttWebhooksKey}" th:value="*{iftttWebhooksKey}" required/>
+    </p>
+    <p>
+        <button onclick="removeTestParam()" type="submit">更新</button>
+    </p>
+</form>
+</body>
+</html>

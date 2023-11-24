@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+<body>
+
+<blockquote>
+    <p id="message">魔法師正在驗證您的Portal帳號，請稍待片刻...</p>
+</blockquote>
+<script th:inline="javascript" th:with="sseUrl=@{/sse/verify_account/{verifyId}(verifyId=${verifyId})}">
+    const evtSource = new EventSource([[${sseUrl}]]);
+    evtSource.onmessage = (event) => {
+        document.getElementById('message').innerText = event.data;
+        evtSource.close();
+    };
+</script>
+
+</body>
+</html>

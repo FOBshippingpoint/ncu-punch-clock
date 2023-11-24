@@ -1,0 +1,11 @@
+body {
+    min-width: 400px;
+}
+
+.inline_form {
+    display: inline;
+}
+
+.no_decoration {
+    text-decoration: none;
+}

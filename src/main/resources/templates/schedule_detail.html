@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+
+<h2>打卡紀錄</h2>
+<form th:action="@{/schedules/edit/{id}(id=${punchDTO.id})}" method="post" th:object="${punchDTO}">
+    <th:block th:replace="~{fragments/form_error :: formError}"></th:block>
+    <p>
+        <label>簽到工作/計畫網址</label><br/>
+        <input type="text" th:field="*{partTimeUsuallyUrl}" th:value="*{getPartTimeUsuallyIdFromUrl()}"/>
+        <a th:href="*{partTimeUsuallyUrl}">
+            <button>開啟連結</button>
+        </a>
+    </p>
+    <p>
+        <label>工作名稱</label><br/>
+        <input type="text" th:field="*{jobName}" th:value="*{jobName}"/>
+    </p>
+    <p>
+        <label>工作內容</label><br/>
+        <input type="text" th:field="*{jobDescription}" th:value="*{jobDescription}"/>
+    </p>
+    <p>
+        <label>簽到/退時間</label><br/>
+        <input id="_date" type="date" th:field="*{date}"/>
+        <!--
+            I have no idea why this didn't work, so I had to use javascript
+            <input type="date" th:field="*{date}" th:value="${#temporals.format(punchDTO.date, 'yyyy-MM-dd')}"/>
+            (the above value would be 2021/8/1, but the valid html date value format should be 2021-08-01)
+        -->
+        <script th:inline="javascript">
+            document.getElementById("_date").value = [[${#temporals.format(punchDTO.date, 'yyyy-MM-dd')}]];
+        </script>
+        <input type="number" th:field="*{clockInTime}" th:value="*{clockInTime}" min="8" max="17" required> ~
+        <input type="number" th:field="*{clockOutTime}" th:value="*{clockInTime}" min="8" max="17" required>
+    </p>
+    <button type="submit">更新</button>
+    <form th:action="@{/schedules/delete/{id}(id=${punchDTO.id})}" method="post" class="inline_form">
+        <button type="submit" class="confirm_btn">刪除</button>
+    </form>
+</form>
+</body>
+</html>

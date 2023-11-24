@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<form>
+    <th:block th:fragment="formError">
+        <th:block th:if="${customError}">
+            <blockquote>
+                ⚠️<span th:text="${customError}"></span>
+            </blockquote>
+        </th:block>
+        <th:block th:unless="${customError}">
+            <blockquote th:if="${#fields.hasAnyErrors()}">
+                <div th:each="err : ${#fields.errors('*')}">
+                    ⚠️<span th:text="${err}"></span>
+                </div>
+            </blockquote>
+        </th:block>
+    </th:block>
+</form>
+</body>
+</html>

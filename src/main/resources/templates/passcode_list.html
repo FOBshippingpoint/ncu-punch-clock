@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+
+<h2>邀請碼管理</h2>
+<table>
+    <tr>
+        <th>編號</th>
+        <th>邀請碼</th>
+    </tr>
+    <tr th:each="p : ${passcodes}">
+        <th:block th:object="${p}">
+            <td th:text="*{id}"></td>
+            <td th:text="*{passcode}"></td>
+        </th:block>
+    </tr>
+</table>
+
+<form th:action="@{/admin/passcodes/new}" method="post" th:object="${passcodeDTO}">
+    <p>
+        <input type="text" th:field="*{passcode}" required>
+        <button type="submit">新增</button>
+    </p>
+</form>
+
+</body>
+</html>

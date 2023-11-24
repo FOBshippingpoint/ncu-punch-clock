@@ -1,3 +1,6 @@
+# H2 Database
+*.db
+
 HELP.md
 .gradle
 build/

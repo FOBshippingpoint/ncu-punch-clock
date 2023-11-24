@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
+<body>
+<h2>登入</h2>
+<form th:action="@{/login}" method="post">
+    <div th:if="${param.error}">
+        <th:block th:replace="~{fragments/form_error :: formError (customError='Portal帳號或密碼有誤。')}"></th:block>
+    </div>
+    <blockquote th:if="${param.logout}">
+        已登出
+    </blockquote>
+    <p>
+        <label>Portal帳號</label><br/>
+        <input type="text" name="username"/>
+    </p>
+    <p>
+        <label>Portal密碼</label><br/>
+        <input type="password" name="password"/>
+    </p>
+    <p>
+        <button type="submit">登入</button>
+    </p>
+</form>
+</body>
+</html>

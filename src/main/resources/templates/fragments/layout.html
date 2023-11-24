@@ -1,0 +1,76 @@
+<!doctype html>
+<html th:fragment="layout (template)">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>🧙‍♂️NCU打卡魔法師</title>
+    <!-- new.css: https://github.com/xz/new.css -->
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    <!-- custom css -->
+    <link rel="stylesheet" th:href="@{/resources/css/styles.css}"/>
+</head>
+
+<body>
+<header>
+    <h1><a th:href="@{/}" style="text-decoration: inherit; color: inherit;">NCU打卡魔法師</a></h1>
+    <nav>
+        <th:block sec:authorize="isAuthenticated()">
+            <a th:href="@{/schedules}">打卡清單</a> /
+            <th:block sec:authorize="!hasRole('ROLE_ADMIN')">
+                <a th:href="@{/schedules/new}">新增排程</a> /
+                <a th:href="@{/change_ifttt_key}">通知設定</a> /
+            </th:block>
+            <a th:href="@{/change_password}">更改密碼</a> /
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/users}">使用者管理</a> /
+                <a th:href="@{/admin/passcodes}">邀請碼管理</a> /
+            </th:block>
+            <form id="logout_form" th:action="@{/logout}" method="post" class="inline_form">
+                <a id="logout" href="#">登出</a>
+                <script>
+                    document
+                        .getElementById('logout')
+                        .addEventListener('click', () => document.getElementById('logout_form').submit());
+                </script>
+            </form>
+        </th:block>
+        <th:block sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}">登入</a> /
+            <a th:href="@{/sign_up}">註冊</a>
+        </th:block>
+    </nav>
+</header>
+
+<blockquote th:if="${notification} != null">
+    <p th:text="${notification}"></p>
+</blockquote>
+<th:block th:insert="${template}"/>
+
+<script>
+    document.querySelectorAll('.confirm_btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            if (!confirm(`確定要${btn.textContent}嗎？`)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+
+<br/>
+<hr>
+<br/>
+
+<footer>
+    <p>
+        ʕ •ᴥ•ʔ made by <a href="https://github.com/FOBshippingpoint/" target="_blank">CC Lan</a> |
+        <a href="https://github.com/FOBshippingpoint/ncu-punch-clock" target="_blank">GitHub</a>
+    </p>
+</footer>
+</body>
+
+</html>
