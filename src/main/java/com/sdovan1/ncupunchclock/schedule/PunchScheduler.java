@@ -1,9 +1,8 @@
 package com.sdovan1.ncupunchclock.schedule;
 
 import com.sdovan1.ncupunchclock.bot.Publisher;
-import com.sdovan1.ncupunchclock.bot.PunchAgent;
+import com.sdovan1.ncupunchclock.ifttt.IftttPunchEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.security.crypto.codec.Hex;
@@ -86,7 +85,7 @@ public class PunchScheduler {
                 log.error("Schedule {} clock out failed with exception: ", punch, e);
             } finally {
                 repository.save(punch);
-                var punchEvent = new PunchEvent(punch);
+                var punchEvent = new IftttPunchEvent(punch);
                 agent.getDriver().quit();
                 taskMap.remove(task);
 

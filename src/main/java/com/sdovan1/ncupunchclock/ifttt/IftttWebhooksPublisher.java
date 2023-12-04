@@ -34,7 +34,7 @@ public class IftttWebhooksPublisher implements Publisher {
     @Override
     public <T extends PunchEvent> void trigger(T punchEvent) {
         if (punchEvent instanceof IftttPunchEvent) {
-            trigger((IftttPunchEvent) punchEvent);
+            trigger(punchEvent);
         } else {
             throw new IllegalArgumentException("punchEvent must be an instance of IftttPunchEvent");
         }
