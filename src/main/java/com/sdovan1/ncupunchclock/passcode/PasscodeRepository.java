@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface PasscodeRepository extends CrudRepository<Passcode, Long> {
     Optional<Passcode> findByPasscode(String passcode);
+
+    void deleteByPasscode(String passcode);
 }

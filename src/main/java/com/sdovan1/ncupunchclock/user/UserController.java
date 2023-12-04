@@ -88,7 +88,9 @@ public class UserController {
             if (ex == null) {
                 userPasswordEncryptor.setPassword(user, user.getPassword());
                 userRepository.save(user);
+                passcodeRepository.deleteByPasscode(user.getPasscode());
                 log.info("User {} registered", user.getUsername());
+                log.info("Passcode {} consumed", user.getPasscode());
             }
         });
 
@@ -125,7 +127,7 @@ public class UserController {
                         }
                     } else {
                         event = event.data("註冊失敗，請通知管理員。");
-                        log.error("Unknown exception caught when verifying user's portal account: ", ex);
+                        log.error("Unknown exception caught when verifying the user's portal account: ", ex);
                     }
                 } else {
                     event = event.data("註冊成功！");
@@ -140,7 +142,7 @@ public class UserController {
                 }
             });
         } else {
-            emitter.completeWithError(new RuntimeException("invalid verifyId"));
+            emitter.completeWithError(new RuntimeException("Invalid verifyId"));
         }
         return emitter;
     }
