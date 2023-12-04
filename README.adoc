@@ -1,0 +1,80 @@
+= NCU Punch Clock
+CC Lan <https://github.com/FOBshippingpoint[@FOBshippingpoint]>
+v1.0, 2023-12-04
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:toc:
+:toc-placement!:
+toc::[]
+
+== Introduction
+
+NCU Punch Clock (NPC) is a web application for National Central University
+students to schedule their part-time jobs, and NPC will automatically clock
+in and out for you, eliminating concerns about forgetting to do so.
+
+== Getting Started
+
+. Clone the repository
++
+[source,console]
+----
+git clone https://github.com/FOBshippingpoint/ncu-punch-clock.git
+cd ncu-punch-clock
+----
+. Install dependencies
++
+[source,console]
+----
+gradlew build
+----
+. Run the application
++
+[source,console]
+----
+gradlew bootRun
+----
+
+== Deployment
+
+. Build the application
++
+[source,console]
+----
+# Build a jar file named like `ncu-punch-clock-0.0.1-SNAPSHOT.jar` in `build/libs`
+gradlew bootJar
+----
+
+. Configure environment variables
++
+The default environment variables are listed in `src/main/resources/application.properties`.
+But you should not use them in production,
+configure your own environment variables instead.
+You can found example in `src/main/resources/.env.example`.
+Create a `.env` file and replace the values that fit your needs.
++
+[source,console]
+----
+set -a
+source .env
+set +a
+----
+
+. Run the application
++
+[source,console]
+----
+java -jar build/libs/ncu-punch-clock-0.0.1-SNAPSHOT.jar
+----
+
+[NOTE]
+====
+You may want to use `systemd` to manage NPC.
+See https://docs.spring.io/spring-boot/docs/current/reference/html/deployment.html#deployment.installing.system-d[Spring Documentation] for more information.
