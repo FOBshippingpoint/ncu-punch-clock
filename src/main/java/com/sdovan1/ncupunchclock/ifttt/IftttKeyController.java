@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.logging.ConsoleHandler;
 
 @Controller
-//@PreAuthorize("hasRole('ROLE_USER')")
+@PreAuthorize("hasRole('ROLE_USER')")
 public class IftttKeyController {
     private final IftttKeyRepository iftttKeyRepository;
     private final IftttWebhooksPublisher iftttWebhooksPublisher;
@@ -33,6 +33,7 @@ public class IftttKeyController {
     @PostMapping("/change_ifttt_key")
     public String updateIftttKey(@AuthenticationPrincipal CustomUserDetails userDetails, IftttKeyDTO iftttKeyDTO, Model model) {
         var iftttKey = iftttKeyRepository.findByUser(userDetails.getUser()).orElseGet(IftttKey::new);
+        iftttKey.setUser(userDetails.getUser());
         iftttKey.setIftttWebhooksKey(iftttKeyDTO.getIftttWebhooksKey());
         iftttKeyRepository.save(iftttKey);
         iftttWebhooksPublisher.trigger(iftttKeyDTO.getIftttWebhooksKey(), "NCU打卡魔法師通知測試");

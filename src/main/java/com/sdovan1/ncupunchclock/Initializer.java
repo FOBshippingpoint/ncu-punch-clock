@@ -53,6 +53,8 @@ public class Initializer {
 
             // Initialize existing punches
             log.info("===Initializing existing punches===");
+
+            // TODO: Find "shcedulable" punches instead of findAll.
             var punches = punchRepository.findAll();
             // Set punches to expired based on current time and save
             punches.forEach(Punch::resetStatus);

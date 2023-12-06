@@ -42,6 +42,7 @@ public class PunchScheduler {
         if (scheduledFuture != null) {
             scheduledFuture.cancel(false);
             taskMap.remove(task);
+            log.info("Canceled {} {} at {}", punch, taskType, taskType == TaskType.CLOCK_IN ? punch.getClockInTime() : punch.getClockOutTime());
         }
     }
 

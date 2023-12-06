@@ -17,7 +17,7 @@ public class ScheduleDTOValidator implements Validator {
         if (scheduleDTO.getClockInTime() != null && scheduleDTO.getClockOutTime() != null && scheduleDTO.getClockInTime() >= scheduleDTO.getClockOutTime()) {
             errors.rejectValue("clockInTime", "clockInTime", "上班時間必須早於下班時間");
         }
-        if (scheduleDTO.getStartDate() != null && scheduleDTO.getEndDate() != null && scheduleDTO.getStartDate() >= scheduleDTO.getEndDate()) {
+        if (scheduleDTO.getStartDate() != null && scheduleDTO.getEndDate() != null && scheduleDTO.getStartDate() > scheduleDTO.getEndDate()) {
             errors.rejectValue("startDate", "startDate", "每月開始日期必須早於每月結束日期");
         }
 
