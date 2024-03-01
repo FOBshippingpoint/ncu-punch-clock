@@ -7,17 +7,17 @@ public class PunchEvent {
     String jobName;
     String jobDescription;
     String partTimeUsuallyUrl;
-    Punch.ClockInOutStatus status;
+    Punch.Status status;
 
     public String getSummary() {
         String status;
-        if (getStatus() == Punch.ClockInOutStatus.CLOCK_IN_SUCCESS) {
+        if (getStatus() == Punch.Status.CLOCK_IN_SUCCESS) {
             status = getStatus() + "✨";
-        } else if (getStatus() == Punch.ClockInOutStatus.CLOCK_OUT_SUCCESS) {
+        } else if (getStatus() == Punch.Status.CLOCK_OUT_SUCCESS) {
             status = getStatus() + "🎉";
-        } else if (getStatus() == Punch.ClockInOutStatus.CLOCK_IN_FAILED) {
+        } else if (getStatus() == Punch.Status.CLOCK_IN_FAILED) {
             status = getStatus() + "😭";
-        } else if (getStatus() == Punch.ClockInOutStatus.CLOCK_OUT_FAILED) {
+        } else if (getStatus() == Punch.Status.CLOCK_OUT_FAILED) {
             status = getStatus() + "😭";
         } else {
             status = getStatus().toString();

@@ -48,7 +48,7 @@ public class PunchDTO {
     private LocalDate date;
 
     private String jobName;
-    private Punch.ClockInOutStatus status;
+    private Punch.Status status;
 
     public String getPartTimeUsuallyIdFromUrl() {
         return Punch.getPartTimeUsuallyIdFromUrl(partTimeUsuallyUrl);
@@ -79,7 +79,7 @@ public class PunchDTO {
                 .jobDescription(getJobDescription())
                 .clockInTime(clockInTime)
                 .clockOutTime(clockOutTime)
-                .status(Punch.ClockInOutStatus.PENDING)
+                .status(Punch.Status.PENDING)
                 .build();
     }
 

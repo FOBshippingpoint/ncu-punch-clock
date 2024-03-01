@@ -1,6 +1,5 @@
 package com.sdovan1.ncupunchclock.schedule;
 
-import com.sdovan1.ncupunchclock.schedule.Punch;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
@@ -52,7 +51,7 @@ public class ScheduleDTO {
                         .jobName(jobName)
                         .jobDescription(jobDescription)
                         .partTimeUsuallyId(Punch.getPartTimeUsuallyIdFromUrl(partTimeUrl))
-                        .status(Punch.ClockInOutStatus.PENDING)
+                        .status(Punch.Status.PENDING)
                         .build();
                 punches.add(punch);
                 date = date.plusDays(1);

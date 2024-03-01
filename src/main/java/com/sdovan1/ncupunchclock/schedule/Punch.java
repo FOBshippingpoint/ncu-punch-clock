@@ -37,12 +37,12 @@ public class Punch {
     private String jobDescription;
 
     @Enumerated(EnumType.ORDINAL)
-    private ClockInOutStatus status;
+    private Status status;
 
     @Transient
     public static final ZoneId TIME_ZONE = ZoneId.of("Asia/Taipei");
 
-    public static enum ClockInOutStatus {
+    public static enum Status {
         PENDING("待簽到"),
         EXPIRED("已過期"),
         CLOCK_IN_SUCCESS("簽到成功"),
@@ -52,7 +52,7 @@ public class Punch {
 
         final String name;
 
-        ClockInOutStatus(String name) {
+        Status(String name) {
             this.name = name;
         }
 
@@ -71,8 +71,8 @@ public class Punch {
     }
 
     public void resetStatus() {
-        if (status == ClockInOutStatus.PENDING && isAfterClockInTime() && isAfterClockOutTime()) {
-            this.status = ClockInOutStatus.EXPIRED;
+        if (status == Status.PENDING && isAfterClockInTime() && isAfterClockOutTime()) {
+            this.status = Status.EXPIRED;
         }
     }
 
@@ -93,7 +93,7 @@ public class Punch {
     }
 
     public boolean isEditable() {
-        return getStatus() == ClockInOutStatus.PENDING;
+        return getStatus() == Status.PENDING;
     }
 
     public static String getPartTimeUsuallyIdFromUrl(String partTimeUrl) {

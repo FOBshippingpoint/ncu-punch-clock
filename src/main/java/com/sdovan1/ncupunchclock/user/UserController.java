@@ -2,7 +2,7 @@ package com.sdovan1.ncupunchclock.user;
 
 import com.sdovan1.ncupunchclock.schedule.PunchAgentFactory;
 import com.sdovan1.ncupunchclock.passcode.PasscodeRepository;
-import com.sdovan1.ncupunchclock.schedule.PunchLoginFailedException;
+import com.sdovan1.ncupunchclock.schedule.LoginFailedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -101,11 +101,7 @@ public class UserController {
     public CompletableFuture<Void> verifyPortalAccount(User user) {
         return CompletableFuture.runAsync(() -> {
             var agent = punchAgentFactory.create(user.getUsername(), user.getPassword());
-            try {
-                agent.login();
-            } finally {
-                agent.getDriver().quit();
-            }
+            agent.loginCheck();
         });
     }
 
@@ -117,10 +113,10 @@ public class UserController {
             future.whenComplete((result, ex) -> {
                 var event = SseEmitter.event().name("message");
                 if (ex != null) {
-                    if (ex.getCause() instanceof PunchLoginFailedException e) {
-                        if (e.getMessage().equals(PunchLoginFailedException.FAILED_TO_PASS_CAPTCHA)) {
+                    if (ex.getCause() instanceof LoginFailedException e) {
+                        if (e.getMessage().equals(LoginFailedException.FAILED_TO_PASS_CAPTCHA)) {
                             event = event.data("註冊失敗，" + e.getMessage() + "，請通知管理員。");
-                        } else if (e.getMessage().equals(PunchLoginFailedException.WRONG_USERNAME_OR_PASSWORD)) {
+                        } else if (e.getMessage().equals(LoginFailedException.WRONG_USERNAME_OR_PASSWORD)) {
                             event = event.data("註冊失敗，" + e.getMessage() + "。");
                         } else {
                             event = event.data("註冊失敗，請通知管理員。");

@@ -61,33 +61,32 @@ public class PunchScheduler {
             var partTimeUsuallyId = punch.getPartTimeUsuallyId();
             var username = punch.getUser().getUsername();
             var password = new String(encryptor.decrypt(Hex.decode(punch.getUser().getPass())));
-            var agent = punchAgentFactory.create(partTimeUsuallyId, username, password);
+            var agent = punchAgentFactory.create(partTimeUsuallyId, username, password, punch.getJobDescription());
             try {
                 if (taskType == TaskType.CLOCK_IN) {
-                    agent.login().clockIn();
-                    punch.setStatus(Punch.ClockInOutStatus.CLOCK_IN_SUCCESS);
+                    agent.clockIn();
+                    punch.setStatus(Punch.Status.CLOCK_IN_SUCCESS);
                 } else {
-                    agent.login().clockOut(punch.getJobDescription());
-                    punch.setStatus(Punch.ClockInOutStatus.CLOCK_OUT_SUCCESS);
+                    agent.clockOut();
+                    punch.setStatus(Punch.Status.CLOCK_OUT_SUCCESS);
                 }
-            } catch (PunchLoginFailedException e) {
+            } catch (LoginFailedException e) {
                 if (taskType == TaskType.CLOCK_IN) {
-                    punch.setStatus(Punch.ClockInOutStatus.CLOCK_IN_FAILED);
+                    punch.setStatus(Punch.Status.CLOCK_IN_FAILED);
                     log.error("Schedule {} clock in failed with exception: ", punch, e);
                 } else {
-                    punch.setStatus(Punch.ClockInOutStatus.CLOCK_OUT_FAILED);
+                    punch.setStatus(Punch.Status.CLOCK_OUT_FAILED);
                     log.error("Schedule {} clock out failed with exception: ", punch, e);
                 }
-            } catch (PunchClockInFailedException e) {
-                punch.setStatus(Punch.ClockInOutStatus.CLOCK_IN_FAILED);
+            } catch (ClockInFailedException e) {
+                punch.setStatus(Punch.Status.CLOCK_IN_FAILED);
                 log.error("Schedule {} clock in failed with exception: ", punch, e);
-            } catch (PunchClockOutFailedException e) {
-                punch.setStatus(Punch.ClockInOutStatus.CLOCK_OUT_FAILED);
+            } catch (ClockOutFailedException e) {
+                punch.setStatus(Punch.Status.CLOCK_OUT_FAILED);
                 log.error("Schedule {} clock out failed with exception: ", punch, e);
             } finally {
                 repository.save(punch);
                 var punchEvent = new IftttPunchEvent(punch);
-                agent.getDriver().quit();
                 taskMap.remove(task);
 
                 publisher.trigger(punchEvent);
@@ -105,7 +104,7 @@ public class PunchScheduler {
     public void scheduleAll(List<Punch> punches) {
         // Schedule clock in for punches that are not clocked in yet
         punches.stream()
-                .filter(punch -> punch.getStatus() == Punch.ClockInOutStatus.PENDING)
+                .filter(punch -> punch.getStatus() == Punch.Status.PENDING)
                 .filter(punch -> !punch.isAfterClockInTime())
                 .forEach(punch -> {
                     schedule(punch, TaskType.CLOCK_IN);
@@ -114,7 +113,7 @@ public class PunchScheduler {
 
         // Schedule clock out for punches that are already clocked in
         punches.stream()
-                .filter(punch -> punch.getStatus() == Punch.ClockInOutStatus.CLOCK_IN_SUCCESS)
+                .filter(punch -> punch.getStatus() == Punch.Status.CLOCK_IN_SUCCESS)
                 .filter(punch -> !punch.isAfterClockOutTime())
                 .forEach(punch -> schedule(punch, TaskType.CLOCK_OUT));
     }
