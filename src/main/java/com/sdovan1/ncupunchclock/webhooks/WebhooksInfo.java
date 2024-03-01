@@ -1,4 +1,4 @@
-package com.sdovan1.ncupunchclock.ifttt;
+package com.sdovan1.ncupunchclock.webhooks;
 
 import com.sdovan1.ncupunchclock.user.User;
 import jakarta.persistence.*;
@@ -6,12 +6,13 @@ import lombok.Data;
 
 @Data
 @Entity
-public class IftttKey {
+public class WebhooksInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String iftttWebhooksKey;
+    @Column(columnDefinition = "TEXT")
+    private String info;
 
     @OneToOne
     private User user;

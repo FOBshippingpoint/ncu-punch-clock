@@ -1,7 +1,7 @@
 package com.sdovan1.ncupunchclock.schedule;
 
 import com.sdovan1.ncupunchclock.bot.Publisher;
-import com.sdovan1.ncupunchclock.ifttt.IftttPunchEvent;
+import com.sdovan1.ncupunchclock.webhooks.WebhooksPunchEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
@@ -86,7 +86,7 @@ public class PunchScheduler {
                 log.error("Schedule {} clock out failed with exception: ", punch, e);
             } finally {
                 repository.save(punch);
-                var punchEvent = new IftttPunchEvent(punch);
+                var punchEvent = new WebhooksPunchEvent(punch);
                 taskMap.remove(task);
 
                 publisher.trigger(punchEvent);

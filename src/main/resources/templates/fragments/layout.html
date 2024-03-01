@@ -23,7 +23,7 @@
             <a th:href="@{/schedules}">打卡清單</a> /
             <th:block sec:authorize="!hasRole('ROLE_ADMIN')">
                 <a th:href="@{/schedules/new}">新增排程</a> /
-                <a th:href="@{/change_ifttt_key}">通知設定</a> /
+                <a th:href="@{/change_make_webhooks}">通知設定</a> /
             </th:block>
             <a th:href="@{/change_password}">更改密碼</a> /
             <th:block sec:authorize="hasRole('ROLE_ADMIN')">
