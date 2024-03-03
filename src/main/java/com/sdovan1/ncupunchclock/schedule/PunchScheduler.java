@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
@@ -22,7 +23,7 @@ public class PunchScheduler {
     @Autowired
     private BytesEncryptor encryptor;
 
-    private final Map<Task, ScheduledFuture<?>> taskMap = new ConcurrentHashMap<>();
+    private final Map<TaskId, ScheduledFuture<?>> taskMap = new ConcurrentHashMap<>();
 
     @Autowired
     private PunchRepository repository;
@@ -37,11 +38,11 @@ public class PunchScheduler {
 
 
     public void cancelScheduledPunch(Punch punch, TaskType taskType) {
-        var task = new Task(punch, taskType);
-        var scheduledFuture = taskMap.get(task);
+        var taskId = new TaskId(punch.getScheduleId(), taskType);
+        var scheduledFuture = taskMap.get(taskId);
         if (scheduledFuture != null) {
             scheduledFuture.cancel(false);
-            taskMap.remove(task);
+            taskMap.remove(taskId);
             log.info("Canceled {} {} at {}", punch, taskType, taskType == TaskType.CLOCK_IN ? punch.getClockInTime() : punch.getClockOutTime());
         }
     }
@@ -56,7 +57,6 @@ public class PunchScheduler {
     }
 
     public void schedule(Punch punch, TaskType taskType) {
-        var task = new Task(punch, taskType);
         var future = taskScheduler.schedule(() -> {
             var partTimeUsuallyId = punch.getPartTimeUsuallyId();
             var username = punch.getUser().getUsername();
@@ -87,12 +87,13 @@ public class PunchScheduler {
             } finally {
                 repository.save(punch);
                 var punchEvent = new WebhooksPunchEvent(punch);
-                taskMap.remove(task);
-
+                taskMap.remove(new TaskId(punch.getScheduleId(), taskType));
                 publisher.trigger(punchEvent);
             }
         }, taskType == TaskType.CLOCK_IN ? punch.getClockInTime() : punch.getClockOutTime());
-        taskMap.put(task, future);
+        punch.setScheduleId(UUID.randomUUID().toString());
+        taskMap.put(new TaskId(punch.getScheduleId(), taskType), future);
+        repository.save(punch);
         log.info("Scheduled {} {} at {}", punch, taskType, taskType == TaskType.CLOCK_IN ? punch.getClockInTime() : punch.getClockOutTime());
     }
 
@@ -118,7 +119,7 @@ public class PunchScheduler {
                 .forEach(punch -> schedule(punch, TaskType.CLOCK_OUT));
     }
 
-    public record Task(Punch punch, TaskType taskType) {
+    record TaskId(String scheduleId, TaskType taskType) {
     }
 
     public enum TaskType {

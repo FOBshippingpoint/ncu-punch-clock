@@ -39,6 +39,9 @@ public class Punch {
     @Enumerated(EnumType.ORDINAL)
     private Status status;
 
+    @Column
+    private String scheduleId;
+
     @Transient
     public static final ZoneId TIME_ZONE = ZoneId.of("Asia/Taipei");
 
