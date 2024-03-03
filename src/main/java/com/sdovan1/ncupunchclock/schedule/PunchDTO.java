@@ -69,8 +69,9 @@ public class PunchDTO {
         var clockInTime = Instant.from(
                 LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), this.clockInTime, 0).atZone(Punch.TIME_ZONE)
         );
+        // Add 2 minutes to ensure enough time for the punch to be processed
         var clockOutTime = Instant.from(
-                LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), this.clockOutTime, 0).atZone(Punch.TIME_ZONE)
+                LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), this.clockOutTime, 0).plusMinutes(2).atZone(Punch.TIME_ZONE)
         );
 
         return Punch.builder()
