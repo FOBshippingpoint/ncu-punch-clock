@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
 <body>
 <h2>通知設定</h2>
-<form id="change_webhooks_form" th:action="@{/change_webhooks}" method="post" th:object="${makeWebhooksInfoDTO}">
+<form id="change_webhooks_form" th:action="@{/change_make_webhooks}" method="post" th:object="${makeWebhooksInfoDTO}">
     <th:block th:replace="~{fragments/form_error :: formError}"></th:block>
     <p>
         NCU打卡魔法師透過<a href="https://make.com/">Make</a>傳送簽到/退通知，您可以連接至LINE
@@ -14,18 +14,20 @@
         <input id="input_make_url" type="url" placeholder="請貼上Make連結（例：https://hook....make.com/...）" th:field="*{url}" th:value="*{url}" required/>
     </p>
     <p id="show_if_url_fill" style="display: none">
-        請點選此<a id="a_make_url" href="#">Make連結</a>並以瀏覽器開啟連結，以便NCU打卡魔法師送出通知時附加訊息。
+        請點選此<a id="a_make_url" href="#" target="_blank">Make連結</a>並以瀏覽器開啟連結，以便NCU打卡魔法師送出通知時附加訊息。
     </p>
     <p>
-        <button id="submit" type="submit" disabled>更新</button>
+        <button id="submit" type="submit" disabled title="請先點選上方的連結">更新</button>
     </p>
 </form>
 <script>
+    document.getElementById('input_make_url').value = "";
     document.getElementById('input_make_url').addEventListener('input', (e) => {
         document.getElementById('show_if_url_fill').style.display = e.target.value ? 'block' : 'none';
         document.getElementById('a_make_url').href = e.target.value + "?message=NCU打卡魔法師測試";
     });
     document.getElementById('a_make_url').addEventListener('click', (e) => {
+        document.getElementById("submit").removeAttribute("title");
         document.getElementById("submit").disabled = false;
     });
 </script>
