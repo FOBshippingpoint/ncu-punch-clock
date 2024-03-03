@@ -17,11 +17,7 @@ public class MakeWebhooksPublisher implements Publisher {
     }
 
     public void trigger(WebhooksPunchEvent punchEvent) {
-        var webhooksInfo = webhooksInfoRepository
-                .findByUser(punchEvent.getUser())
-                .orElseThrow(
-                        () -> new WebhooksTriggerException("No webhooks found for user " + punchEvent.getUser().getUsername())
-                );
+        var webhooksInfo = webhooksInfoRepository.findByUser(punchEvent.getUser()).orElseThrow(() -> new WebhooksTriggerException("No webhooks found for user " + punchEvent.getUser().getUsername()));
         var makeWebhooksDTO = MakeWebhooksInfoAdapter.toDTO(webhooksInfo);
         trigger(makeWebhooksDTO.getUrl(), punchEvent.getSummary());
     }
@@ -36,9 +32,12 @@ public class MakeWebhooksPublisher implements Publisher {
     }
 
     public void trigger(String makeUrl, String message) {
-        RestClient.create()
+        RestClient
+                .builder()
+                .baseUrl(makeUrl)
+                .build()
                 .get()
-                .uri(makeUrl, Map.of("message", message))
+                .uri(uriBuilder -> uriBuilder.queryParam("message", message).build())
                 .retrieve();
     }
 }
