@@ -30,7 +30,7 @@
             (the above value would be 2021/8/1, but the valid html date value format should be 2021-08-01)
         -->
         <script th:inline="javascript">
-            document.getElementById("_date").value = [[${#temporals.format(punchDTO.date, 'yyyy-MM-dd')}]];
+            document.getElementById("_date").value = [[${#temporals.format(punchDTO.date, 'yyyy-MM-dd', 'GMT+08:00')}]];
         </script>
         <input type="number" th:field="*{clockInTime}" th:value="*{clockInTime}" min="8" max="17" required> ~
         <input type="number" th:field="*{clockOutTime}" th:value="*{clockInTime}" min="8" max="17" required>

@@ -38,7 +38,7 @@
                     <a th:href="*{partTimeUsuallyUrl}"
                        th:text="*{jobName}"></a>
                 </td>
-                <td th:text="${#temporals.format(punch.clockInTime, 'yyyy/MM/dd HH') + '~' + #temporals.format(punch.clockOutTime, 'HH') + '時'}"></td>
+                <td th:text="${#temporals.format(punch.clockInTime, 'yyyy/MM/dd HH', 'GMT+08:00') + '~' + #temporals.format(punch.clockOutTime, 'HH', 'GMT+08:00') + '時'}"></td>
                 <td th:text="*{jobDescription}"></td>
                 <td th:text="*{status}"></td>
                 <td>
