@@ -27,7 +27,7 @@ class PlaywrightAgentTest {
 
     @Test
     void testLoginCheck() {
-        var agent = new PlaywrightAgent(null, "username", "password", null);
+        var agent = new PlaywrightAgent(null, "username", "password", null, true);
         if (isUnderNcuNetwork){
             assertThatExceptionOfType(LoginFailedException.class).isThrownBy(agent::loginCheck).withMessage(LoginFailedException.WRONG_USERNAME_OR_PASSWORD);
         } else {
