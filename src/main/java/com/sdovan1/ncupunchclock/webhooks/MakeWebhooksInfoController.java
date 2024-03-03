@@ -16,12 +16,12 @@ import java.net.URL;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_USER')")
-public class MakeWebhooksController {
+public class MakeWebhooksInfoController {
     private final WebhooksInfoRepository webhooksInfoRepository;
     private final MakeWebhooksPublisher webhooksPublisher;
 
     @Autowired
-    public MakeWebhooksController(WebhooksInfoRepository webhooksInfoRepository, MakeWebhooksPublisher webhooksPublisher) {
+    public MakeWebhooksInfoController(WebhooksInfoRepository webhooksInfoRepository, MakeWebhooksPublisher webhooksPublisher) {
         this.webhooksInfoRepository = webhooksInfoRepository;
         this.webhooksPublisher = webhooksPublisher;
     }
