@@ -1,6 +1,6 @@
 = NCU Punch Clock
 CC Lan <https://github.com/FOBshippingpoint[@FOBshippingpoint]>
-v1.0, 2023-12-04
+v1.1, 2024-03-03
 ifndef::env-github[:icons: font]
 ifdef::env-github[]
 :status:
@@ -33,13 +33,13 @@ cd ncu-punch-clock
 +
 [source,console]
 ----
-gradlew build
+maven install
 ----
 . Run the application
 +
 [source,console]
 ----
-gradlew bootRun
+maven spring-boot:run
 ----
 
 == Deployment
@@ -48,8 +48,8 @@ gradlew bootRun
 +
 [source,console]
 ----
-# Build a jar file named like `ncu-punch-clock-0.0.1-SNAPSHOT.jar` in `build/libs`
-gradlew bootJar
+# Build a jar file named like `ncu-punch-clock-0.0.1-SNAPSHOT.jar` in `target` directory
+maven package
 ----
 
 . Configure environment variables
@@ -71,10 +71,11 @@ set +a
 +
 [source,console]
 ----
-java -jar build/libs/ncu-punch-clock-0.0.1-SNAPSHOT.jar
+java -jar ncu-punch-clock-0.0.1-SNAPSHOT.jar
 ----
 
 [NOTE]
 ====
 You may want to use `systemd` to manage NPC.
 See https://docs.spring.io/spring-boot/docs/current/reference/html/deployment.html#deployment.installing.system-d[Spring Documentation] for more information.
+====
