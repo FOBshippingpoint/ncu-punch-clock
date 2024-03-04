@@ -25,9 +25,6 @@ public class ScheduleController {
     @Autowired
     private PunchScheduler punchScheduler;
 
-    @Autowired
-    private PunchService punchService;
-
     @ModelAttribute("scheduleDTO")
     public ScheduleDTO scheduleDTO() {
         return ScheduleDTO.builder().build();
@@ -106,9 +103,6 @@ public class ScheduleController {
     @PreAuthorize("@punchService.checkIfUserIsOwner(#id, principal)")
     public String deletePunch(@PathVariable Long id) {
         var punch = punchRepository.findById(id).orElseThrow();
-        if (!punch.isEditable()) {
-            throw new PunchCannotDeleteException("無法刪除此排程");
-        }
         punchScheduler.cancelScheduledPunch(punch);
         punchRepository.deleteById(id);
         return "redirect:/schedules";

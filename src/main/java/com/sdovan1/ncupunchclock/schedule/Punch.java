@@ -45,7 +45,7 @@ public class Punch {
     @Transient
     public static final ZoneId TIME_ZONE = ZoneId.of("Asia/Taipei");
 
-    public static enum Status {
+    public enum Status {
         PENDING("待簽到"),
         EXPIRED("已過期"),
         CLOCK_IN_SUCCESS("簽到成功"),
