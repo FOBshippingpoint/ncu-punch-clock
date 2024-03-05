@@ -47,7 +47,8 @@ public class ScheduleDTO {
             while (date.getDayOfMonth() <= endDate) {
                 var punch = Punch.builder()
                         .clockInTime(Instant.from(LocalDateTime.of(date, LocalTime.of(clockInTime, 0)).atZone(Punch.TIME_ZONE)))
-                        .clockOutTime(Instant.from(LocalDateTime.of(date, LocalTime.of(clockOutTime, 0)).atZone(Punch.TIME_ZONE)))
+                        // Add 2 minutes to clock out time to ensure (clock out - clock in time) > 1hr
+                        .clockOutTime(Instant.from(LocalDateTime.of(date, LocalTime.of(clockOutTime, 2)).atZone(Punch.TIME_ZONE)))
                         .jobName(jobName)
                         .jobDescription(jobDescription)
                         .partTimeUsuallyId(Punch.getPartTimeUsuallyIdFromUrl(partTimeUrl))
